@@ -1,0 +1,4 @@
+package "justjavac/num_cpus"
+
+// Values
+fn get() -> Int

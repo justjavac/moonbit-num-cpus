@@ -1,0 +1,9 @@
+{
+  "is-main": true,
+  "targets": {
+    "num_cpus_native.mbt": ["native", "llvm"]
+  },
+  "native-stub": [
+    "num_cpus_stub.c"
+  ]
+}

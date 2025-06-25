@@ -1,0 +1,17 @@
+{
+  "name": "justjavac/num_cpus",
+  "version": "0.1.0",
+  "readme": "README.md",
+  "repository": "https://github.com/justjavac/moonbit-num-cpus",
+  "license": "MIT",
+  "keywords": [
+    "cpu",
+    "cpus",
+    "core",
+    "processor",
+    "hardware",
+    "system"
+  ],
+  "description": "A Moonbit module to get the number of CPU cores available on the system.",
+  "source": "src"
+}
