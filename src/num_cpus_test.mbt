@@ -2,6 +2,7 @@
 //
 // Licensed under the MIT License
 
+///|
 test "get cpu count" {
   let cpu_count = get()
   // CPU count should be at least 1
@@ -11,6 +12,7 @@ test "get cpu count" {
   println("CPU count: \{cpu_count}")
 }
 
+///|
 test "get cpu count is consistent" {
   let count1 = get()
   let count2 = get()
