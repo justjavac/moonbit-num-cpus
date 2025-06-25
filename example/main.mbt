@@ -5,8 +5,8 @@
 ///|
 /// Example usage of the num_cpus module
 fn main {
-  let logical_cpus = get()
-  let physical_cpus = get_physical()
+  let logical_cpus = @num_cpus.get()
+  let physical_cpus = @num_cpus.get_physical()
   println("Number of logical CPU cores: \{logical_cpus}")
   println("Number of physical CPU cores: \{physical_cpus}")
 }

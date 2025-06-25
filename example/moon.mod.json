@@ -1,0 +1,16 @@
+{
+  "name": "justjavac/num_cpus/examples",
+  "version": "0.1.0",
+  "deps": {
+    "justjavac/num_cpus": {
+      "path": ".."
+    }
+  },
+  "readme": "",
+  "repository": "https://github.com/justjavac/moonbit-num_cpus/tree/main/examples",
+  "license": "MIT",
+  "keywords": [],
+  "description": "",
+  "source": "",
+  "warn-list": ""
+}

@@ -1,0 +1,10 @@
+{
+  "is-main": true,
+  "import": [
+    "justjavac/num_cpus"
+  ],
+  "supported-targets": ["native"],
+  "targets": {
+    "main.mbt": ["native"]
+  }
+}

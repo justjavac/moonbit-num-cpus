@@ -1,7 +1,7 @@
 {
-  "is-main": true,
+  "supported-targets": ["native", "llvm"],
   "targets": {
-    "num_cpus_native.mbt": ["native", "llvm"]
+    "num_cpus.mbt": ["native", "llvm"]
   },
   "native-stub": [
     "num_cpus_stub.c"
