@@ -3,6 +3,8 @@ package "justjavac/num_cpus"
 // Values
 fn get() -> Int
 
+fn get_physical() -> Int
+
 // Types and methods
 
 // Type aliases
