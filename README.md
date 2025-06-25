@@ -3,6 +3,15 @@
 A MoonBit module to get the number of CPU cores available on the system,
 supporting both logical and physical core detection.
 
+## Installation
+
+Add `justjavac/num_cpus` to your dependencies:
+
+```bash
+moon update
+moon add justjavac/num_cpus
+```
+
 ## Usage
 
 ```moonbit
@@ -85,24 +94,6 @@ int moonbit_get_physical_cpu_count();  // Platform-specific implementations
    logical core count
 4. **Safety**: Never returns 0; minimum return value is 1
 
-## Installation
-
-Add this to your `moon.mod.json`:
-
-```json
-{
-  "deps": {
-    "justjavac/num_cpus": "^0.1.2"
-  }
-}
-```
-
-Then run:
-
-```bash
-moon install
-```
-
 ## Examples
 
 ### Basic Usage
@@ -145,37 +136,6 @@ fn get_optimal_thread_count() -> Int {
   physical  // Simplified example
 }
 ```
-
-## Building
-
-### For Native Targets
-
-```bash
-moon build --target native
-```
-
-### For All Targets
-
-```bash
-moon build
-```
-
-### Running Tests
-
-```bash
-moon test
-```
-
-## Comparison with Other Languages
-
-| Language    | Library                         | Logical CPUs | Physical CPUs |
-| ----------- | ------------------------------- | ------------ | ------------- |
-| **MoonBit** | **justjavac/num_cpus**          | ✅           | ✅            |
-| Rust        | `num_cpus`                      | ✅           | ✅            |
-| Go          | `runtime.NumCPU()`              | ✅           | ➖            |
-| Python      | `os.cpu_count()`                | ✅           | ➖            |
-| Node.js     | `os.cpus().length`              | ✅           | ➖            |
-| Java        | `Runtime.availableProcessors()` | ✅           | ➖            |
 
 ## Contributing
 
