@@ -1,21 +1,14 @@
 # moonbit-num-cpus
 
-A MoonBit module to get the number of CPU cores available on the system, supporting both logical and physical core detection.
-
-## Features
-
-- **Cross-platform support**: Works on Windows, macOS, Linux, and other Unix-like systems
-- **Multiple core types**: Get both logical CPU cores (including hyperthreading) and physical CPU cores
-- **C FFI implementation**: Uses native system APIs for accurate CPU detection
-- **Fallback support**: Graceful fallbacks for unsupported platforms
-- **Zero dependencies**: Self-contained implementation
+A MoonBit module to get the number of CPU cores available on the system,
+supporting both logical and physical core detection.
 
 ## Usage
 
 ```moonbit
 fn main {
-  let logical_cpus = @justjavac/num_cpus.get()
-  let physical_cpus = @justjavac/num_cpus.get_physical()
+  let logical_cpus = @num_cpus.get()
+  let physical_cpus = @num_cpus.get_physical()
   
   println("Logical CPU cores: \{logical_cpus}")
   println("Physical CPU cores: \{physical_cpus}")
@@ -42,27 +35,28 @@ This includes cores from hyperthreading/simultaneous multithreading (SMT).
 
 Returns the number of **physical** CPU cores available on the system.
 
-- **Windows**: Uses `GetLogicalProcessorInformation()` to count physical processor cores
-- **macOS**: Uses `sysctlbyname("hw.physicalcpu")` 
-- **Linux**: Parses `/proc/cpuinfo` to count unique physical processors and cores
+- **Windows**: Uses `GetLogicalProcessorInformation()` to count physical
+  processor cores
+- **macOS**: Uses `sysctlbyname("hw.physicalcpu")`
+- **Linux**: Parses `/proc/cpuinfo` to count unique physical processors and
+  cores
 - **Other Unix**: Falls back to logical CPU count
 - **Fallback**: Returns `1` for unknown platforms
 
-This excludes hyperthreading/SMT virtual cores and represents actual physical CPU cores.
+This excludes hyperthreading/SMT virtual cores and represents actual physical
+CPU cores.
 
 ## Platform Support
 
-| Platform | Logical CPUs | Physical CPUs | Implementation |
-|----------|-------------|---------------|----------------|
-| Windows | ✅ | ✅ | Win32 API (`GetSystemInfo`, `GetLogicalProcessorInformation`) |
-| macOS | ✅ | ✅ | POSIX (`sysconf`) + BSD (`sysctlbyname`) |
-| Linux | ✅ | ✅ | POSIX (`sysconf`) + `/proc/cpuinfo` parsing |
-| Other Unix | ✅ | ⚠️ | POSIX (`sysconf`), falls back to logical count |
-| JavaScript/Node.js | ✅ | ➖ | `os.cpus().length` / `navigator.hardwareConcurrency` |
-| WASM | ⚠️ | ➖ | Returns `1` (limited system access) |
+| Platform   | Logical CPUs | Physical CPUs | Implementation                                                |
+| ---------- | ------------ | ------------- | ------------------------------------------------------------- |
+| Windows    | ✅           | ✅            | Win32 API (`GetSystemInfo`, `GetLogicalProcessorInformation`) |
+| macOS      | ✅           | ✅            | POSIX (`sysconf`) + BSD (`sysctlbyname`)                      |
+| Linux      | ✅           | ✅            | POSIX (`sysconf`) + `/proc/cpuinfo` parsing                   |
+| Other Unix | ✅           | ⚠️            | POSIX (`sysconf`), falls back to logical count                |
 
 - ✅ = Full support
-- ⚠️ = Limited/fallback support  
+- ⚠️ = Limited/fallback support
 - ➖ = Not applicable
 
 ## Implementation Details
@@ -83,9 +77,12 @@ int moonbit_get_physical_cpu_count();  // Platform-specific implementations
 
 ### Cross-Platform Strategy
 
-1. **Logical CPUs**: Uses standardized POSIX `sysconf()` on Unix systems and Win32 `GetSystemInfo()` on Windows
-2. **Physical CPUs**: Uses platform-specific APIs to distinguish physical from logical cores
-3. **Graceful Fallbacks**: If physical core detection fails, falls back to logical core count
+1. **Logical CPUs**: Uses standardized POSIX `sysconf()` on Unix systems and
+   Win32 `GetSystemInfo()` on Windows
+2. **Physical CPUs**: Uses platform-specific APIs to distinguish physical from
+   logical cores
+3. **Graceful Fallbacks**: If physical core detection fails, falls back to
+   logical core count
 4. **Safety**: Never returns 0; minimum return value is 1
 
 ## Installation
@@ -112,7 +109,7 @@ moon install
 
 ```moonbit
 fn main {
-  println("CPU cores: \{@justjavac/num_cpus.get()}")
+  println("CPU cores: \{@num_cpus.get()}")
 }
 ```
 
@@ -120,8 +117,8 @@ fn main {
 
 ```moonbit
 fn main {
-  let logical = @justjavac/num_cpus.get()
-  let physical = @justjavac/num_cpus.get_physical()
+  let logical = @num_cpus.get()
+  let physical = @num_cpus.get_physical()
   
   let ratio = logical.to_double() / physical.to_double()
   
@@ -139,8 +136,8 @@ fn main {
 
 ```moonbit
 fn get_optimal_thread_count() -> Int {
-  let logical = @justjavac/num_cpus.get()
-  let physical = @justjavac/num_cpus.get_physical()
+  let logical = @num_cpus.get()
+  let physical = @num_cpus.get_physical()
   
   // Use physical cores for CPU-bound tasks
   // Use logical cores for I/O-bound tasks
@@ -171,14 +168,14 @@ moon test
 
 ## Comparison with Other Languages
 
-| Language | Library | Logical CPUs | Physical CPUs |
-|----------|---------|-------------|---------------|
-| **MoonBit** | **justjavac/num_cpus** | ✅ | ✅ |
-| Rust | `num_cpus` | ✅ | ✅ |
-| Go | `runtime.NumCPU()` | ✅ | ➖ |
-| Python | `os.cpu_count()` | ✅ | ➖ |
-| Node.js | `os.cpus().length` | ✅ | ➖ |
-| Java | `Runtime.availableProcessors()` | ✅ | ➖ |
+| Language    | Library                         | Logical CPUs | Physical CPUs |
+| ----------- | ------------------------------- | ------------ | ------------- |
+| **MoonBit** | **justjavac/num_cpus**          | ✅           | ✅            |
+| Rust        | `num_cpus`                      | ✅           | ✅            |
+| Go          | `runtime.NumCPU()`              | ✅           | ➖            |
+| Python      | `os.cpu_count()`                | ✅           | ➖            |
+| Node.js     | `os.cpus().length`              | ✅           | ➖            |
+| Java        | `Runtime.availableProcessors()` | ✅           | ➖            |
 
 ## Contributing
 
@@ -190,6 +187,7 @@ MIT License - see [LICENSE](LICENSE) file for details.
 
 ## Acknowledgments
 
-- Inspired by the Rust [`num_cpus`](https://github.com/seanmonstar/num_cpus) crate
+- Inspired by the Rust [`num_cpus`](https://github.com/seanmonstar/num_cpus)
+  crate
 - Uses cross-platform system APIs for accurate CPU detection
 - Built with MoonBit's C FFI capabilities
