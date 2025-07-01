@@ -1,6 +1,6 @@
 {
   "name": "justjavac/num_cpus/example",
-  "version": "0.1.1",
+  "version": "0.1.0",
   "deps": {
     "justjavac/num_cpus": {
       "path": ".."
