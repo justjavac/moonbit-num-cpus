@@ -12,6 +12,6 @@
     "hardware",
     "system"
   ],
-  "description": "A Moonbit module to get the number of CPU cores available on the system.",
+  "description": "Get the number of CPU cores available on the system.",
   "source": "src"
 }
