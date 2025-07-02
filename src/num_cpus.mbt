@@ -18,17 +18,17 @@
 /// ```moonbit
 /// // Get logical CPU cores (includes hyperthreading)
 /// let logical_cores = @num_cpus.get()
-/// println("System has \(logical_cores) logical CPU cores")
+/// println("System has {logical_cores} logical CPU cores")
 /// 
 /// // Get physical CPU cores (excludes hyperthreading)
 /// let physical_cores = @num_cpus.get_physical()
-/// println("System has \(physical_cores) physical CPU cores")
+/// println("System has {physical_cores} physical CPU cores")
 /// 
 /// // Calculate hyperthreading ratio
 /// if physical_cores > 0 {
 ///   let ht_ratio = logical_cores / physical_cores
 ///   if ht_ratio > 1 {
-///     println("Hyperthreading is enabled (ratio: \(ht_ratio):1)")
+///     println("Hyperthreading is enabled (ratio: {ht_ratio}:1)")
 ///   } else {
 ///     println("No hyperthreading detected")
 ///   }
@@ -66,7 +66,7 @@
 /// Example:
 /// ```moonbit
 /// let logical_cores = @num_cpus.get()
-/// println("Logical CPU cores: \(logical_cores)")
+/// println("Logical CPU cores: {logical_cores}")
 /// ```
 /// 
 /// Note:
@@ -95,9 +95,9 @@ pub fn get() -> Int {
 /// ```moonbit
 /// let physical_cores = @num_cpus.get_physical()
 /// let logical_cores = @num_cpus.get()
-/// println("Physical cores: \(physical_cores)")
-/// println("Logical cores: \(logical_cores)")
-/// println("Hyperthreading ratio: \(logical_cores / physical_cores)")
+/// println("Physical cores: {physical_cores}")
+/// println("Logical cores: {logical_cores}")
+/// println("Hyperthreading ratio: {logical_cores / physical_cores}")
 /// ```
 /// 
 /// Note:
