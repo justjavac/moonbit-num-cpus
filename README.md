@@ -28,33 +28,6 @@ fn main {
 }
 ```
 
-## API
-
-### `get() -> Int`
-
-Returns the number of **logical** CPU cores available on the system.
-
-- **Windows**: Uses `GetSystemInfo()` to get `dwNumberOfProcessors`
-- **Unix/Linux/macOS**: Uses `sysconf(_SC_NPROCESSORS_ONLN)`
-- **Fallback**: Returns `1` for unknown platforms
-
-This includes cores from hyperthreading/simultaneous multithreading (SMT).
-
-### `get_physical() -> Int`
-
-Returns the number of **physical** CPU cores available on the system.
-
-- **Windows**: Uses `GetLogicalProcessorInformation()` to count physical
-  processor cores
-- **macOS**: Uses `sysctlbyname("hw.physicalcpu")`
-- **Linux**: Parses `/proc/cpuinfo` to count unique physical processors and
-  cores
-- **Other Unix**: Falls back to logical CPU count
-- **Fallback**: Returns `1` for unknown platforms
-
-This excludes hyperthreading/SMT virtual cores and represents actual physical
-CPU cores.
-
 ## Platform Support
 
 | Platform   | Logical CPUs | Physical CPUs | Implementation                                                |
@@ -136,10 +109,6 @@ fn get_optimal_thread_count() -> Int {
   physical  // Simplified example
 }
 ```
-
-## Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## License
 
