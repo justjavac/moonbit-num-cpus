@@ -2,9 +2,9 @@
 package "justjavac/num_cpus"
 
 // Values
-fn get() -> Int
+pub fn get() -> Int
 
-fn get_physical() -> Int
+pub fn get_physical() -> Int
 
 // Errors
 
