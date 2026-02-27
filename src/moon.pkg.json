@@ -1,9 +1,0 @@
-{
-  "supported-targets": ["native", "llvm"],
-  "targets": {
-    "num_cpus.mbt": ["native", "llvm"]
-  },
-  "native-stub": [
-    "num_cpus_stub.c"
-  ]
-}
