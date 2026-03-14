@@ -1,5 +1,5 @@
 options(
   "native-stub": [ "num_cpus_stub.c" ],
-  "supported-targets": [ "native", "llvm" ],
+  "supported-targets": "+native+llvm",
   targets: { "num_cpus.mbt": [ "native", "llvm" ] },
 )
