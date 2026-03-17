@@ -1,0 +1,10 @@
+import {
+  "justjavac/num_cpus",
+}
+
+options(
+  "is-main": true,
+  "native-stub": [ "num_cpus_stub.c" ],
+  supported_targets: "+native+llvm",
+  targets: { "main.mbt": [ "native", "llvm" ] },
+)
