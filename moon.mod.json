@@ -13,5 +13,7 @@
     "system"
   ],
   "description": "Get the number of CPU cores available on the system.",
-  "source": "src"
+  "source": "src",
+  "preferred-target": "native",
+  "supported-targets": "+native"
 }
