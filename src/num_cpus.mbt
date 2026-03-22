@@ -15,7 +15,7 @@
 /// 
 /// ## Usage Examples
 /// 
-/// ```moonbit
+/// ```moonbit nocheck
 /// // Get logical CPU cores (includes hyperthreading)
 /// let logical_cores = @num_cpus.get()
 /// println("System has \{logical_cores} logical CPU cores")
