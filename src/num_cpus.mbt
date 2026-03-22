@@ -15,7 +15,7 @@
 /// 
 /// ## Usage Examples
 /// 
-/// ```moonbit nocheck
+/// ```mbt
 /// // Get logical CPU cores (includes hyperthreading)
 /// let logical_cores = @num_cpus.get()
 /// println("System has \{logical_cores} logical CPU cores")
@@ -64,7 +64,7 @@
 /// - The number of logical CPU cores available on the system.
 /// 
 /// Example:
-/// ```moonbit nocheck
+/// ```mbt
 /// let logical_cores = @num_cpus.get()
 /// println("Logical CPU cores: \{logical_cores}")
 /// ```
@@ -92,7 +92,7 @@ pub fn get() -> Int {
 /// - The number of physical CPU cores (not including hyperthreading).
 /// 
 /// Example:
-/// ```moonbit nocheck
+/// ```mbt
 /// let physical_cores = @num_cpus.get_physical()
 /// let logical_cores = @num_cpus.get()
 /// println("Physical cores: \{physical_cores}")
