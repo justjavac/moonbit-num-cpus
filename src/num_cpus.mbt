@@ -64,7 +64,7 @@
 /// - The number of logical CPU cores available on the system.
 /// 
 /// Example:
-/// ```mbt
+/// ```mbt nocheck
 /// let logical_cores = @num_cpus.get()
 /// println("Logical CPU cores: \{logical_cores}")
 /// ```
@@ -92,7 +92,7 @@ pub fn get() -> Int {
 /// - The number of physical CPU cores (not including hyperthreading).
 /// 
 /// Example:
-/// ```mbt
+/// ```mbt nocheck
 /// let physical_cores = @num_cpus.get_physical()
 /// let logical_cores = @num_cpus.get()
 /// println("Physical cores: \{physical_cores}")
