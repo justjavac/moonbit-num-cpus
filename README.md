@@ -1,122 +1,94 @@
 # moonbit-num-cpus
 
-A MoonBit module to get the number of CPU cores available on the system,
-supporting both logical and physical core detection.
+[![CI](https://github.com/justjavac/moonbit-num-cpus/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/justjavac/moonbit-num-cpus/actions/workflows/ci.yml)
+[![codecov](https://codecov.io/gh/justjavac/moonbit-num-cpus/graph/badge.svg?branch=main)](https://codecov.io/gh/justjavac/moonbit-num-cpus)
+
+`moonbit-num-cpus` is a small MoonBit module for detecting the number of CPU
+cores available on the current machine.
+
+It supports:
+
+- Logical CPU count, including SMT / hyper-threading
+- Physical CPU count when the operating system can report it
+- Native implementations for Windows, macOS, Linux, and other Unix-like systems
+- Safe fallback behavior that never returns less than `1`
 
 ## Installation
 
-Add `justjavac/num_cpus` to your dependencies:
-
 ```bash
-moon update
 moon add justjavac/num_cpus
 ```
+
+## API
+
+| Function | Description |
+| -------- | ----------- |
+| `@num_cpus.get()` | Returns the number of logical CPU cores |
+| `@num_cpus.get_physical()` | Returns the number of physical CPU cores, or a fallback value when exact detection is unavailable |
 
 ## Usage
 
 ```moonbit
 fn main {
-  let logical_cpus = @num_cpus.get()
-  let physical_cpus = @num_cpus.get_physical()
-  
-  println("Logical CPU cores: \{logical_cpus}")
-  println("Physical CPU cores: \{physical_cpus}")
-  
-  if logical_cpus > physical_cpus {
-    println("Hyperthreading/SMT is enabled")
+  let logical = @num_cpus.get()
+  let physical = @num_cpus.get_physical()
+
+  println("Logical CPU cores: \{logical}")
+  println("Physical CPU cores: \{physical}")
+
+  if logical > physical {
+    println("SMT or hyper-threading is likely enabled")
   }
+}
+```
+
+## Common Use Cases
+
+### Size a thread pool
+
+```moonbit
+fn worker_count() -> Int {
+  @num_cpus.get_physical()
+}
+```
+
+### Compare logical and physical cores
+
+```moonbit
+fn main {
+  let logical = @num_cpus.get()
+  let physical = @num_cpus.get_physical()
+  println("CPU topology: \{physical} physical / \{logical} logical")
 }
 ```
 
 ## Platform Support
 
-| Platform   | Logical CPUs | Physical CPUs | Implementation                                                |
-| ---------- | ------------ | ------------- | ------------------------------------------------------------- |
-| Windows    | ✅           | ✅            | Win32 API (`GetSystemInfo`, `GetLogicalProcessorInformation`) |
-| macOS      | ✅           | ✅            | POSIX (`sysconf`) + BSD (`sysctlbyname`)                      |
-| Linux      | ✅           | ✅            | POSIX (`sysconf`) + `/proc/cpuinfo` parsing                   |
-| Other Unix | ✅           | ⚠️            | POSIX (`sysconf`), falls back to logical count                |
+| Platform | Logical CPUs | Physical CPUs | Implementation |
+| -------- | ------------ | ------------- | -------------- |
+| Windows | Yes | Yes | `GetSystemInfo` and `GetLogicalProcessorInformation` |
+| macOS | Yes | Yes | `sysconf` and `sysctl` |
+| Linux | Yes | Yes | `sysconf` and `/proc/cpuinfo` |
+| Other Unix-like systems | Yes | Fallback | `sysconf`, with physical count falling back to logical count |
 
-- ✅ = Full support
-- ⚠️ = Limited/fallback support
-- ➖ = Not applicable
+## How It Works
 
-## Implementation Details
+- Logical CPU detection uses native platform APIs rather than external commands.
+- Physical CPU detection uses the best available system interface on each OS.
+- When physical core detection is unavailable, the module falls back to the logical CPU count.
+- The package is designed for the `native` target and declares it as the preferred target.
 
-### C FFI Architecture
+## Development
 
-The native implementation uses C FFI to call platform-specific system APIs:
-
-```c
-// Windows
-int moonbit_get_cpu_count();           // GetSystemInfo
-int moonbit_get_physical_cpu_count();  // GetLogicalProcessorInformation
-
-// Unix-like systems  
-int moonbit_get_cpu_count();           // sysconf(_SC_NPROCESSORS_ONLN)
-int moonbit_get_physical_cpu_count();  // Platform-specific implementations
-```
-
-### Cross-Platform Strategy
-
-1. **Logical CPUs**: Uses standardized POSIX `sysconf()` on Unix systems and
-   Win32 `GetSystemInfo()` on Windows
-2. **Physical CPUs**: Uses platform-specific APIs to distinguish physical from
-   logical cores
-3. **Graceful Fallbacks**: If physical core detection fails, falls back to
-   logical core count
-4. **Safety**: Never returns 0; minimum return value is 1
-
-## Examples
-
-### Basic Usage
-
-```moonbit
-fn main {
-  println("CPU cores: \{@num_cpus.get()}")
-}
-```
-
-### Comparing Logical vs Physical
-
-```moonbit
-fn main {
-  let logical = @num_cpus.get()
-  let physical = @num_cpus.get_physical()
-  
-  let ratio = logical.to_double() / physical.to_double()
-  
-  if ratio == 1.0 {
-    println("No hyperthreading detected")
-  } else if ratio == 2.0 {
-    println("2x hyperthreading (common)")
-  } else {
-    println("SMT ratio: \{ratio}")
-  }
-}
-```
-
-### Thread Pool Sizing
-
-```moonbit
-fn get_optimal_thread_count() -> Int {
-  let logical = @num_cpus.get()
-  let physical = @num_cpus.get_physical()
-  
-  // Use physical cores for CPU-bound tasks
-  // Use logical cores for I/O-bound tasks
-  // This is just an example - you'd implement is_cpu_bound_workload()
-  physical  // Simplified example
-}
+```bash
+moon test --target native
+moon check --deny-warn --target native
 ```
 
 ## License
 
-MIT License - see [LICENSE](LICENSE) file for details.
+MIT. See [LICENSE](LICENSE).
 
 ## Acknowledgments
 
-- Inspired by the Rust [`num_cpus`](https://github.com/seanmonstar/num_cpus)
-  crate
-- Uses cross-platform system APIs for accurate CPU detection
-- Built with MoonBit's C FFI capabilities
+Inspired by Rust's [`num_cpus`](https://github.com/seanmonstar/num_cpus) crate.
