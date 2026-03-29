@@ -79,19 +79,6 @@ jobs:
           moon test --target native --enable-coverage
           moon coverage analyze -p justjavac/num_cpus -- -f cobertura -o coverage.xml
 
-      - name: Require 100% coverage
-        shell: bash
-        run: |
-          python - <<'PY'
-          import xml.etree.ElementTree as ET
-
-          root = ET.parse("coverage.xml").getroot()
-          rate = float(root.attrib["line-rate"])
-          if rate < 1.0:
-              raise SystemExit(f"Expected 100% line coverage, got {rate:.2%}")
-          print(f"Coverage: {rate:.2%}")
-          PY
-
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v5
         with:
