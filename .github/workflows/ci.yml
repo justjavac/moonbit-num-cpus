@@ -1,113 +1,100 @@
-name: ci
+name: CI
 
-on: [push, pull_request]
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
-  stable:
+  test:
+    name: Test (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
     strategy:
+      fail-fast: false
       matrix:
         os:
           - ubuntu-latest
           - macos-latest
-          # - macos-13
           - windows-latest
-      fail-fast: false
-    runs-on: ${{ matrix.os }}
-    continue-on-error: false
-    steps:
-      - uses: actions/checkout@v4
 
-      - name: install
-        if: ${{ matrix.os != 'windows-latest' }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Install MoonBit (Unix)
+        if: runner.os != 'Windows'
+        shell: bash
         run: |
           curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash
-          echo "$HOME/.moon/bin" >> $GITHUB_PATH
+          echo "$HOME/.moon/bin" >> "$GITHUB_PATH"
 
-      - name: install on windows
-        if: ${{ matrix.os == 'windows-latest' }}
+      - name: Install MoonBit (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
         run: |
-          Set-ExecutionPolicy RemoteSigned -Scope CurrentUser; irm https://cli.moonbitlang.com/install/powershell.ps1 | iex
-          "C:\Users\runneradmin\.moon\bin" | Out-File -FilePath $env:GITHUB_PATH -Append
+          Set-ExecutionPolicy Bypass -Scope Process -Force
+          irm https://cli.moonbitlang.com/install/powershell.ps1 | iex
+          "$HOME/.moon/bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
 
-      - name: moon version
-        run: |
-          moon version --all
+      - name: Test
+        shell: bash
+        run: moon test --target native
 
-      - name: Update Registry
-        run: |
-          moon update
+  verify:
+    name: Verify Generated Files
+    runs-on: ubuntu-latest
 
-      - name: moon info
-        run: |
-          moon info --target native
-          git diff --exit-code
-
-      - name: moon check
-        run: moon check --deny-warn --target native
-
-      - name: format check
-        run: |
-          moon fmt --check
-
-      - name: Run moon test
-        run: |
-          moon test --target native
-
-      - name: moon build
-        run: |
-          moon build --target native
-
-  nightly:
-    strategy:
-      matrix:
-        os:
-          - ubuntu-latest
-          - macos-latest
-          # - macos-13
-          - windows-latest
-    continue-on-error: false
-    runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v5
 
-      - name: install
-        if: ${{ matrix.os != 'windows-latest' }}
+      - name: Install MoonBit
+        shell: bash
         run: |
-          curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash -s nightly
-          echo "$HOME/.moon/bin" >> $GITHUB_PATH
+          curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash
+          echo "$HOME/.moon/bin" >> "$GITHUB_PATH"
 
-      - name: install on windows
-        if: ${{ matrix.os == 'windows-latest' }}
-        env:
-          MOONBIT_INSTALL_VERSION: nightly
+      - name: Verify formatting and generated files
+        shell: bash
         run: |
-          Set-ExecutionPolicy RemoteSigned -Scope CurrentUser; irm https://cli.moonbitlang.com/install/powershell.ps1 | iex
-          "C:\Users\runneradmin\.moon\bin" | Out-File -FilePath $env:GITHUB_PATH -Append
-
-      - name: moon version
-        run: |
-          moon version --all
-
-      - name: Update Registry
-        run: |
-          moon update
-
-      - name: moon info
-        run: |
+          moon fmt --check
+          moon check --deny-warn --target native
           moon info --target native
           git diff --exit-code
 
-      - name: moon check
-        run: moon check --deny-warn --target native
+      - name: Build
+        shell: bash
+        run: moon build --target native
 
-      - name: format check
+      - name: Coverage XML
+        shell: bash
         run: |
-          moon fmt --check
+          moon test --target native --enable-coverage
+          moon coverage analyze -p justjavac/num_cpus -- -f cobertura -o coverage.xml
 
-      - name: Run moon test
+      - name: Require 100% coverage
+        shell: bash
         run: |
-          moon test --target native
+          python - <<'PY'
+          import xml.etree.ElementTree as ET
 
-      - name: moon build
-        run: |
-          moon build --target native
+          root = ET.parse("coverage.xml").getroot()
+          rate = float(root.attrib["line-rate"])
+          if rate < 1.0:
+              raise SystemExit(f"Expected 100% line coverage, got {rate:.2%}")
+          print(f"Coverage: {rate:.2%}")
+          PY
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          files: coverage.xml
+          fail_ci_if_error: true
+          verbose: true
