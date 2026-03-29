@@ -50,7 +50,6 @@ jobs:
   verify:
     name: Verify Generated Files
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout
         uses: actions/checkout@v5
