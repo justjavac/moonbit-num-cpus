@@ -1,5 +1,8 @@
+warnings = "-deprecated"
+
+supported_targets = "+native+llvm"
+
 options(
   "native-stub": [ "num_cpus_stub.c" ],
-  supported_targets: "+native+llvm",
   targets: { "num_cpus.mbt": [ "native", "llvm" ] },
 )
