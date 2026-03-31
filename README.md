@@ -1,7 +1,10 @@
 # moonbit-num-cpus
 
 [![CI](https://github.com/justjavac/moonbit-num-cpus/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/justjavac/moonbit-num-cpus/actions/workflows/ci.yml)
-[![codecov](https://codecov.io/gh/justjavac/moonbit-num-cpus/graph/badge.svg?branch=main)](https://codecov.io/gh/justjavac/moonbit-num-cpus)
+[![Coverage](https://codecov.io/gh/justjavac/moonbit-num-cpus/graph/badge.svg?branch=main)](https://codecov.io/gh/justjavac/moonbit-num-cpus)
+[![Coverage Linux](https://codecov.io/gh/justjavac/moonbit-num-cpus/graph/badge.svg?branch=main&flag=linux)](https://codecov.io/gh/justjavac/moonbit-num-cpus)
+[![Coverage macOS](https://codecov.io/gh/justjavac/moonbit-num-cpus/graph/badge.svg?branch=main&flag=macos)](https://codecov.io/gh/justjavac/moonbit-num-cpus)
+[![Coverage Windows](https://codecov.io/gh/justjavac/moonbit-num-cpus/graph/badge.svg?branch=main&flag=windows)](https://codecov.io/gh/justjavac/moonbit-num-cpus)
 
 `moonbit-num-cpus` is a small MoonBit module for detecting the number of CPU
 cores available on the current machine.
