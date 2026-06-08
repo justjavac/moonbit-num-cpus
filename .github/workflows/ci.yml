@@ -58,7 +58,7 @@ jobs:
         run: moon coverage analyze -p justjavac/num_cpus -- -f cobertura -o "${{ matrix.coverage_file }}"
 
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v5
+        uses: codecov/codecov-action@v7
         with:
           files: ${{ matrix.coverage_file }}
           flags: ${{ matrix.codecov_flag }}
