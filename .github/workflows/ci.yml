@@ -65,6 +65,7 @@ jobs:
           name: coverage-${{ matrix.codecov_flag }}
           fail_ci_if_error: true
           token: ${{ secrets.CODECOV_TOKEN }}
+          skip_validation: true
           verbose: true
 
   verify:
