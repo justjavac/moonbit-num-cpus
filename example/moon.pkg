@@ -2,8 +2,9 @@ import {
   "justjavac/num_cpus",
 }
 
+pkgtype(kind: "executable")
+
 options(
-  "is-main": true,
   supported_targets: "+native+llvm",
   targets: { "main.mbt": [ "native", "llvm" ] },
 )
