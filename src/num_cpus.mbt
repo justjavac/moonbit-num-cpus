@@ -74,7 +74,7 @@
 /// - The result is cached by the operating system and reflects the current
 ///   hardware configuration
 /// - This function is thread-safe
-pub fn get() -> Int {
+pub fn get() -> Int32 {
   get_cpu_count_ffi()
 }
 
@@ -105,7 +105,7 @@ pub fn get() -> Int {
 /// - On systems without hyperthreading, this will return the same value as `get()`
 /// - The implementation may fall back to logical core count on some platforms
 /// - This function is thread-safe
-pub fn get_physical() -> Int {
+pub fn get_physical() -> Int32 {
   get_physical_cpu_count_ffi()
 }
 
@@ -128,7 +128,7 @@ pub fn get_physical() -> Int {
 /// - This function is internal and should not be called directly
 /// - Use `get()` instead for public API access
 /// - The actual implementation is provided by the linked C code
-extern "C" fn get_cpu_count_ffi() -> Int = "moonbit_get_cpu_count"
+extern "C" fn get_cpu_count_ffi() -> Int32 = "moonbit_get_cpu_count"
 
 ///|
 /// FFI function to get physical CPU count from native system.
@@ -154,4 +154,4 @@ extern "C" fn get_cpu_count_ffi() -> Int = "moonbit_get_cpu_count"
 /// - Use `get_physical()` instead for public API access
 /// - The actual implementation is provided by the linked C code
 /// - May require elevated permissions on some platforms for accurate results
-extern "C" fn get_physical_cpu_count_ffi() -> Int = "moonbit_get_physical_cpu_count"
+extern "C" fn get_physical_cpu_count_ffi() -> Int32 = "moonbit_get_physical_cpu_count"
